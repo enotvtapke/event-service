@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Application\Settings\SettingsInterface;
+use App\Controllers\EventController;
+use App\Domain\Event\EventRepository;
+use App\Domain\Event\EventRepositoryImpl;
+use App\Settings\SettingsInterface;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -26,5 +29,21 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+        PDO::class => function (ContainerInterface $c) {
+            $settings = $c->get(SettingsInterface::class);
+
+            $dbSettings = $settings->get('db');
+            $pdo = new PDO(
+                "pgsql:host=" .
+                $dbSettings['host'] . ";port=" . $dbSettings['port'] . ";dbname=" . $dbSettings['dbname'],
+                $dbSettings['user'],
+                $dbSettings['password']
+            );
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            return $pdo;
+        },
+        EventRepository::class => fn(ContainerInterface $c) => new EventRepositoryImpl($c->get(PDO::class)),
+        EventController::class => fn(ContainerInterface $c) => new EventController($c->get(EventRepository::class)),
     ]);
 };
