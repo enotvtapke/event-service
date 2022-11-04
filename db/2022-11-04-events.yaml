@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202211041830
+      author: Aleksandr Stupnikov
+      changes:
+        - createTable:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  type: number(20)
+                  constraints:
+                    primaryKey: true
+                    autoIncrement: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar2(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end
+                  type: datetime
+                  constraints:
+                    nullable: true
+        - createSequence:
+            sequenceName: seq_events
+            startValue: 1
+        - createIndex:
+            columns:
+              - column:
+                  name: start
+            indexName: events_start
+            tableName: events

@@ -1,18 +1,11 @@
-version: '3.7'
-
-volumes:
-    logs:
-        driver: local
-
+version: "3.9"
 services:
-    slim:
-        image: php:7-alpine
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public
-        environment:
-            docker: "true"
-        ports:
-            - "8080:8080"
-        volumes:
-            - .:/var/www
-            - logs:/var/www/logs
+  postgres:
+    image: postgres:14.5
+    restart: always
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "calendar"
+    ports:
+      - ${DB_PORT:-5432}:5432
