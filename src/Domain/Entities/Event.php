@@ -7,8 +7,9 @@ namespace App\Domain\Entities;
 use App\Utils\DateUtils;
 use DateTime;
 use JsonSerializable;
+use PhpParser\JsonDecoder;
 
-class Event implements JsonSerializable
+class Event
 {
     private ?int $id;
 
@@ -44,15 +45,5 @@ class Event implements JsonSerializable
     public function getEnd(): ?DateTime
     {
         return $this->end;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'start' => DateUtils::toString($this->start),
-            'end' => DateUtils::toString($this->end),
-        ];
     }
 }

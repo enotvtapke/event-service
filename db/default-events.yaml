@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  value: 1
+                  value: nextval('seq_events')
               - column:
                   name: name
                   value: My event

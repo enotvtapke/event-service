@@ -44,4 +44,16 @@ class EventRepositoryImpl implements EventRepository
         $events = $query->fetchAll();
         return array_map(fn($row) => $this->eventConverter->convert($row), $events);
     }
+
+    public function create(Event $event): bool
+    {
+        $query = $this->pdo->prepare(
+            "INSERT INTO $this->table (id, name, start, \"end\") VALUES (nextval('seq_events'), :name, :start, :end)"
+        );
+        return $query->execute([
+            $event->getName(),
+            DateUtils::toString($event->getStart()),
+            DateUtils::toString($event->getEnd()),
+        ]);
+    }
 }

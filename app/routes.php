@@ -12,6 +12,7 @@ return function (App $app) {
             $group->get('/between', [EventController::class, 'findAllBetween']);
             $group->get('/{id}', [EventController::class, 'findById']);
             $group->get('', [EventController::class, 'findAll']);
+            $group->post('', [EventController::class, 'create']);
         });
     });
 };

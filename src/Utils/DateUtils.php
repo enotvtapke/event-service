@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use DateTime;
+use DateTimeInterface;
 
 class DateUtils
 {
-    private static string $format = 'Y-m-d H:i:s';
+    private static string $format = DateTimeInterface::ATOM;
 
     public static function toString(?DateTime $dateTime): ?string
     {

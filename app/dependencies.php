@@ -14,6 +14,7 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Tebru\Gson\Gson;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -33,7 +34,7 @@ return function (ContainerBuilder $containerBuilder) {
                     "dbname" => "postgres",
                     "user" => $_ENV['db.user'] ?? 'admin',
                     "password" => $_ENV['db.password'] ?? 'admin'
-                ],
+                ]
             ]);
         },
         LoggerInterface::class => function (ContainerInterface $c) {
@@ -69,6 +70,11 @@ return function (ContainerBuilder $containerBuilder) {
             $c->get(PDO::class),
             $c->get(EventConverter::class),
         ),
-        EventController::class => fn(ContainerInterface $c) => new EventController($c->get(EventRepository::class)),
+        Gson::class => fn (ContainerInterface $c) => Gson::builder()->build(),
+        EventController::class => fn(ContainerInterface $c) => new EventController(
+            $c->get(EventRepository::class),
+            $c->get(Gson::class),
+            $c->get(LoggerInterface::class),
+        ),
     ]);
 };
