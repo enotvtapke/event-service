@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Settings;
+namespace App\Utils;
 
-class Settings implements SettingsInterface
+class ConfigImpl implements Config
 {
     private array $settings;
 

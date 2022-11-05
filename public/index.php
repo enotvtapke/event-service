@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Settings\SettingsInterface;
+use App\Utils\Config;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 
@@ -16,9 +16,6 @@ if (false) {
     $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
 
-$settings = require __DIR__ . '/../app/settings.php';
-$settings($containerBuilder);
-
 $dependencies = require __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
 
@@ -30,7 +27,7 @@ $app = AppFactory::create();
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 
-$settings = $container->get(SettingsInterface::class);
+$settings = $container->get(Config::class);
 
 $displayErrorDetails = $settings->get('displayErrorDetails');
 $logError = $settings->get('logError');

@@ -7,7 +7,11 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->group('/events', function (Group $group) {
-        $group->get('', [EventController::class, 'findAll']);
+    $app->group('/api/v1', function (Group $group) {
+        $group->group('/event', function (Group $group) {
+            $group->get('/between', [EventController::class, 'findAllBetween']);
+            $group->get('/{id}', [EventController::class, 'findById']);
+            $group->get('', [EventController::class, 'findAll']);
+        });
     });
 };

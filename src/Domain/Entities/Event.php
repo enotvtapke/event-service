@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Event;
+namespace App\Domain\Entities;
 
+use App\Utils\DateUtils;
 use DateTime;
 use JsonSerializable;
 
@@ -21,8 +22,8 @@ class Event implements JsonSerializable
     {
         $this->id = $id;
         $this->name = $name;
-        $this->$start = $start;
-        $this->$end = $end;
+        $this->start = $start;
+        $this->end = $end;
     }
 
     public function getId(): ?int
@@ -45,14 +46,13 @@ class Event implements JsonSerializable
         return $this->end;
     }
 
-    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'start' => $this->start,
-            'end' => $this->end,
+            'start' => DateUtils::toString($this->start),
+            'end' => DateUtils::toString($this->end),
         ];
     }
 }
