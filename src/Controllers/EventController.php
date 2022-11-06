@@ -48,6 +48,7 @@ class EventController
     public function create(Request $request, Response $response): Response
     {
         $event = $this->gson->fromJson($request->getBody()->getContents(), Event::class);
+        $this->logger->info("Creating event: $event");
         if ($this->eventRepository->create($event)) {
             return $response->withStatus(200);
         } else {

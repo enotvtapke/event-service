@@ -21,5 +21,5 @@ interface EventRepository
      */
     public function findAllWithStartBetween(DateTime $from, DateTime $to): array;
 
-    public function create(Event $event): bool;
+    public function create(Event $event): int;
 }

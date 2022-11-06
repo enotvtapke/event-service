@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202211051628
+      author: Aleksandr Stupnikov
+      changes:
+        - createTable:
+            tableName: events_tags
+            columns:
+              - column:
+                  name: event_id
+                  type: number(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: number(20)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: event_id
+            indexName: events_tags_event_id
+            tableName: events_tags
+        - createIndex:
+            columns:
+              - column:
+                  name: tag_id
+            indexName: events_tags_tag_id
+            tableName: events_tags
+        - addForeignKeyConstraint:
+            baseColumnNames: event_id
+            baseTableName: events_tags
+            constraintName: fk_events_tags_event_id__id
+            referencedColumnNames: id
+            referencedTableName: events
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: events_tags
+            constraintName: fk_events_tags_tag_id__id
+            referencedColumnNames: id
+            referencedTableName: tags

@@ -6,12 +6,10 @@ namespace App\Domain\Entities;
 
 use App\Utils\DateUtils;
 use DateTime;
-use JsonSerializable;
-use PhpParser\JsonDecoder;
 
 class Event
 {
-    private ?int $id;
+    private ?int $id = null;
 
     private string $name;
 
@@ -19,12 +17,18 @@ class Event
 
     private ?DateTime $end;
 
-    public function __construct(?int $id, string $name, DateTime $start, ?DateTime $end)
+    /**
+     * @var array<Tag>
+     */
+    private array $tags = [];
+
+    public function __construct(?int $id, string $name, DateTime $start, ?DateTime $end, array $tags = [])
     {
         $this->id = $id;
         $this->name = $name;
         $this->start = $start;
         $this->end = $end;
+        $this->tags = $tags;
     }
 
     public function getId(): ?int
@@ -45,5 +49,30 @@ class Event
     public function getEnd(): ?DateTime
     {
         return $this->end;
+    }
+
+    /**
+     * @return array<Tag>
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    public function __toString()
+    {
+        $id = $this->id ?? 'null';
+        $start = DateUtils::toString($this->start);
+        $end = DateUtils::toString($this->end);
+        $tags = implode(', ', $this->tags);
+        return "Event { id: $id, name: $this->name, start: $start, end: $end, tags: [$tags] }";
+    }
+
+    /**
+     * @param array $tags
+     */
+    public function setTags(array $tags): void
+    {
+        $this->tags = $tags;
     }
 }

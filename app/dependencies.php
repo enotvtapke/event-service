@@ -6,6 +6,8 @@ use App\Controllers\EventController;
 use App\Domain\Converters\EventConverter;
 use App\Domain\Repositories\EventRepository;
 use App\Domain\Repositories\EventRepositoryImpl;
+use App\Domain\Repositories\TagRepository;
+use App\Domain\Repositories\TagRepositoryImpl;
 use App\Utils\Config;
 use App\Utils\ConfigImpl;
 use DI\ContainerBuilder;
@@ -25,7 +27,8 @@ return function (ContainerBuilder $containerBuilder) {
                 'logErrorDetails' => false,
                 'logger' => [
                     'name' => 'event-service',
-                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+//                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'path' => 'php://stdout',
                     'level' => Logger::DEBUG,
                 ],
                 "db" => [
@@ -65,12 +68,14 @@ return function (ContainerBuilder $containerBuilder) {
             $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             return $pdo;
         },
+        Gson::class => fn(ContainerInterface $c) => Gson::builder()->build(),
         EventConverter::class => fn() => new EventConverter(),
+        TagRepository::class => fn(ContainerInterface $c) => new TagRepositoryImpl($c->get(PDO::class)),
         EventRepository::class => fn(ContainerInterface $c) => new EventRepositoryImpl(
             $c->get(PDO::class),
             $c->get(EventConverter::class),
+            $c->get(TagRepository::class),
         ),
-        Gson::class => fn (ContainerInterface $c) => Gson::builder()->build(),
         EventController::class => fn(ContainerInterface $c) => new EventController(
             $c->get(EventRepository::class),
             $c->get(Gson::class),
