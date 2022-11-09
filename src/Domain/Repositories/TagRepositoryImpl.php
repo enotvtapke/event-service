@@ -24,7 +24,7 @@ class TagRepositoryImpl implements TagRepository
         $this->pdo->beginTransaction();
         try {
             $tagsQuery = $this->pdo->prepare(
-                "INSERT INTO $this->table (id, name) VALUES (nextval('seq_tags'), :name)"
+                "INSERT INTO $this->table (name) VALUES (:name)"
             );
 
             $tagsQuery->execute([$tag->getName()]);

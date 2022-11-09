@@ -3,21 +3,21 @@ databaseChangeLog:
       id: 202211051628
       author: Aleksandr Stupnikov
       changes:
+        - createSequence:
+            sequenceName: seq_tags
+            startValue: 1
         - createTable:
             tableName: tags
             columns:
               - column:
                   name: id
                   type: number(20)
+                  defaultValueSequenceNext: seq_tags
                   constraints:
                     primaryKey: true
                     autoIncrement: true
-                    nullable: false
               - column:
                   name: name
                   type: varchar2(32)
                   constraints:
                     nullable: false
-        - createSequence:
-            sequenceName: seq_tags
-            startValue: 1

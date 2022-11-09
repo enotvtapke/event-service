@@ -56,7 +56,7 @@ class EventRepositoryImpl implements EventRepository
     public function create(Event $event): int
     {
         $query = $this->pdo->prepare(
-            "INSERT INTO $this->table (id, name, start, \"end\") VALUES (nextval('seq_events'), :name, :start, :end)"
+            "INSERT INTO $this->table (name, start, \"end\") VALUES (:name, :start, :end)"
         );
         $query->execute([
             $event->getName(),
