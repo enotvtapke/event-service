@@ -54,10 +54,6 @@ class EventRepositoryImpl implements EventRepository
         return array_map(fn($row) => $this->eventConverter->convert($row), $events);
     }
 
-    /**
-     * @param array<string> $tagNames
-     * @return array
-     */
     public function findAllWithTagNames(array $tagNames): array
     {
         $place_holders = implode(',', array_fill(0, count($tagNames), '?'));

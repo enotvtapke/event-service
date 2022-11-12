@@ -21,5 +21,11 @@ interface EventRepository
      */
     public function findAllWithStartBetween(DateTime $from, ?DateTime $to): array;
 
+    /**
+     * @param array<string> $tagNames
+     * @return array
+     */
+    public function findAllWithTagNames(array $tagNames): array;
+
     public function create(Event $event): int;
 }
