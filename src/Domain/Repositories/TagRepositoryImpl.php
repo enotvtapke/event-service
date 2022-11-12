@@ -3,7 +3,6 @@
 namespace App\Domain\Repositories;
 
 use App\Domain\Entities\Tag;
-use App\Exceptions\ServiceException;
 use PDO;
 
 class TagRepositoryImpl implements TagRepository
@@ -16,9 +15,6 @@ class TagRepositoryImpl implements TagRepository
         $this->pdo = $pdo;
     }
 
-    /**
-     * @throws ServiceException
-     */
     public function create(Tag $tag, int $eventId): int
     {
         $this->pdo->beginTransaction();
@@ -34,8 +30,7 @@ class TagRepositoryImpl implements TagRepository
             $eventsTagsQuery = $this->pdo->prepare(
                 "INSERT INTO events_tags (event_id, tag_id) VALUES (:eventId, :tagId)"
             );
-            $eventsTagsQuery->execute([$eventId, $tagId]) ?:
-                throw new ServiceException("Error during creating relation between event $eventId and tag $tagId");
+            $eventsTagsQuery->execute([$eventId, $tagId]);
         } finally {
             $this->pdo->commit();
         }

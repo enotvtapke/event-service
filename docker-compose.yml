@@ -6,6 +6,7 @@ services:
     environment:
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "admin"
-      POSTGRES_DB: "calendar"
+      POSTGRES_DB: "postgres"
     ports:
       - ${DB_PORT:-5432}:5432
+# TODO добавить тома для бэкапа бд

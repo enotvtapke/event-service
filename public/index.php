@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Middleware\LogMiddleware;
+use App\Middleware\LoggingMiddleware;
 use App\Utils\Config;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
@@ -35,6 +35,6 @@ $logError = $settings->get('logError');
 $logErrorDetails = $settings->get('logErrorDetails');
 
 $app->addErrorMiddleware($displayErrorDetails, $logError, $logErrorDetails);
-$app->add(LogMiddleware::class);
+$app->add(LoggingMiddleware::class);
 
 $app->run();

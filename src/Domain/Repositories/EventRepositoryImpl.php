@@ -6,7 +6,8 @@ namespace App\Domain\Repositories;
 
 use App\Domain\Converters\EventConverter;
 use App\Domain\Entities\Event;
-use App\Utils\DateUtils;
+use App\Domain\Entities\Tag;
+use App\Utils\DateTimeUtils;
 use DateTime;
 use PDO;
 
@@ -45,10 +46,32 @@ class EventRepositoryImpl implements EventRepository
         return $event;
     }
 
-    public function findAllWithStartBetween(DateTime $from, DateTime $to): array
+    public function findAllWithStartBetween(DateTime $from, ?DateTime $to): array
     {
         $query = $this->pdo->prepare("SELECT * FROM $this->table WHERE start >= :start AND start < :end");
-        $query->execute([DateUtils::toString($from), DateUtils::toString($to)]);
+        $query->execute([DateTimeUtils::toString($from), $to ? DateTimeUtils::toString($to) : null]);
+        $events = $query->fetchAll();
+        return array_map(fn($row) => $this->eventConverter->convert($row), $events);
+    }
+
+    /**
+     * @param array<string> $tagNames
+     * @return array
+     */
+    public function findAllWithTagNames(array $tagNames): array
+    {
+        $place_holders = implode(',', array_fill(0, count($tagNames), '?'));
+        $raw =
+            "
+            select *
+            from events
+            where id in (select event_id
+                         from events_tags
+                                  join tags on tags.id = events_tags.tag_id
+                         where tags.name in ($place_holders))
+            ";
+        $query = $this->pdo->prepare("$raw");
+        $query->execute($tagNames);
         $events = $query->fetchAll();
         return array_map(fn($row) => $this->eventConverter->convert($row), $events);
     }
@@ -60,8 +83,8 @@ class EventRepositoryImpl implements EventRepository
         );
         $query->execute([
             $event->getName(),
-            DateUtils::toString($event->getStart()),
-            DateUtils::toString($event->getEnd()),
+            DateTimeUtils::toString($event->getStart()),
+            $event->getEnd() ? DateTimeUtils::toString($event->getEnd()) : null,
         ]);
         $eventId = (int)$this->pdo->lastInsertId('seq_events');
         foreach ($event->getTags() as $tag) {

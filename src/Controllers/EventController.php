@@ -6,7 +6,7 @@ namespace App\Controllers;
 
 use App\Domain\Entities\Event;
 use App\Domain\Repositories\EventRepository;
-use App\Utils\DateUtils;
+use App\Utils\DateTimeUtils;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -39,9 +39,17 @@ class EventController
 
     public function findAllBetween(Request $request, Response $response): Response
     {
-        $from = DateUtils::fromString($request->getQueryParams()['from']);
-        $to = DateUtils::fromString($request->getQueryParams()['to']);
+        $from = DateTimeUtils::fromString($request->getQueryParams()['from']);
+        $to = $request->getQueryParams()['to'];
+        $to = $to ? DateTimeUtils::fromString($to) : null;
         $events = $this->eventRepository->findAllWithStartBetween($from, $to);
+        return $this->respondWithJson($response, $events);
+    }
+
+    public function findByTags(Request $request, Response $response): Response
+    {
+        $tags = $this->gson->fromJson($request->getBody()->getContents(), "array<\App\Domain\Entities\Tag>");
+        $events = $this->eventRepository->findAllWithTagNames(array_map(fn($tag) => $tag->getName(), $tags));
         return $this->respondWithJson($response, $events);
     }
 

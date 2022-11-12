@@ -19,7 +19,7 @@ interface EventRepository
     /**
      * @return Event[]
      */
-    public function findAllWithStartBetween(DateTime $from, DateTime $to): array;
+    public function findAllWithStartBetween(DateTime $from, ?DateTime $to): array;
 
     public function create(Event $event): int;
 }

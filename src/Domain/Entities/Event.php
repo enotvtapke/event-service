@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Entities;
 
-use App\Utils\DateUtils;
+use App\Utils\DateTimeUtils;
 use DateTime;
 
 class Event
@@ -15,7 +15,7 @@ class Event
 
     private DateTime $start;
 
-    private ?DateTime $end;
+    private ?DateTime $end = null;
 
     /**
      * @var array<Tag>
@@ -62,8 +62,8 @@ class Event
     public function __toString()
     {
         $id = $this->id ?? 'null';
-        $start = DateUtils::toString($this->start);
-        $end = DateUtils::toString($this->end);
+        $start = DateTimeUtils::toString($this->start);
+        $end = $this->end ? null : DateTimeUtils::toString($this->end);
         $tags = implode(', ', $this->tags);
         return "Event { id: $id, name: $this->name, start: $start, end: $end, tags: [$tags] }";
     }

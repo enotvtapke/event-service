@@ -10,7 +10,7 @@ use Psr\Http\Server\MiddlewareInterface as Middleware;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Log\LoggerInterface;
 
-class LogMiddleware implements Middleware
+class LoggingMiddleware implements Middleware
 {
     private LoggerInterface $logger;
 

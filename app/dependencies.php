@@ -8,7 +8,7 @@ use App\Domain\Repositories\EventRepository;
 use App\Domain\Repositories\EventRepositoryImpl;
 use App\Domain\Repositories\TagRepository;
 use App\Domain\Repositories\TagRepositoryImpl;
-use App\Middleware\LogMiddleware;
+use App\Middleware\LoggingMiddleware;
 use App\Utils\Config;
 use App\Utils\ConfigImpl;
 use DI\ContainerBuilder;
@@ -55,7 +55,7 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
-        LogMiddleware::class => fn(ContainerInterface $c) => new LogMiddleware($c->get(LoggerInterface::class)),
+        LoggingMiddleware::class => fn(ContainerInterface $c) => new LoggingMiddleware($c->get(LoggerInterface::class)),
         PDO::class => function (ContainerInterface $c) {
             $settings = $c->get(Config::class);
 
