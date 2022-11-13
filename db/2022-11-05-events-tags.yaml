@@ -34,9 +34,11 @@ databaseChangeLog:
             constraintName: fk_events_tags_event_id__id
             referencedColumnNames: id
             referencedTableName: events
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseColumnNames: tag_id
             baseTableName: events_tags
             constraintName: fk_events_tags_tag_id__id
             referencedColumnNames: id
             referencedTableName: tags
+            onDelete: CASCADE

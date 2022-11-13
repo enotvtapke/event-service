@@ -5,17 +5,25 @@ declare(strict_types=1);
 namespace App\Domain\Converters;
 
 use App\Domain\Entities\Event;
+use App\Domain\Entities\Tag;
 use App\Utils\DateTimeUtils;
 
 class EventConverter
 {
-    public function convert(array $row): Event
+    /**
+     * @param array $row
+     * @param array<Tag> $tags
+     * @return Event
+     */
+    public function convert(array $row, array $tags = []): Event
     {
-        return new Event(
+        $event = new Event(
             (int)$row['id'],
             $row['name'],
             DateTimeUtils::fromString($row['start']),
             $row['end'] == null ? null : DateTimeUtils::fromString($row['end']),
         );
+        $event->setTags($tags);
+        return $event;
     }
 }

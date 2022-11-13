@@ -14,6 +14,8 @@ return function (App $app) {
             $group->get('/{id}', [EventController::class, 'findById']);
             $group->get('', [EventController::class, 'findAll']);
             $group->post('', [EventController::class, 'create']);
+            $group->put('', [EventController::class, 'update']);
+            $group->delete('/{id}', [EventController::class, 'delete']);
         });
     });
 };

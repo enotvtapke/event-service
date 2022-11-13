@@ -21,3 +21,9 @@ databaseChangeLog:
                   type: varchar2(32)
                   constraints:
                     nullable: false
+        - createIndex:
+            columns:
+              - column:
+                  name: name
+            indexName: tags_name
+            tableName: tags

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\EventController;
 use App\Domain\Converters\EventConverter;
+use App\Domain\Converters\TagConverter;
 use App\Domain\Repositories\EventRepository;
 use App\Domain\Repositories\EventRepositoryImpl;
 use App\Domain\Repositories\TagRepository;
@@ -72,7 +73,11 @@ return function (ContainerBuilder $containerBuilder) {
         },
         Gson::class => fn(ContainerInterface $c) => Gson::builder()->build(),
         EventConverter::class => fn() => new EventConverter(),
-        TagRepository::class => fn(ContainerInterface $c) => new TagRepositoryImpl($c->get(PDO::class)),
+        TagConverter::class => fn() => new TagConverter(),
+        TagRepository::class => fn(ContainerInterface $c) => new TagRepositoryImpl(
+            $c->get(PDO::class),
+            $c->get(TagConverter::class),
+        ),
         EventRepository::class => fn(ContainerInterface $c) => new EventRepositoryImpl(
             $c->get(PDO::class),
             $c->get(EventConverter::class),

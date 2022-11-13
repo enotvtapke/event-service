@@ -27,5 +27,9 @@ interface EventRepository
      */
     public function findAllWithTagNames(array $tagNames): array;
 
-    public function create(Event $event): int;
+    public function create(Event $event): Event;
+
+    public function update(Event $event);
+
+    public function delete(int $eventId);
 }
