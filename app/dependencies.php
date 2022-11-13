@@ -24,12 +24,12 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         Config::class => function () {
             return new ConfigImpl([
-                'displayErrorDetails' => true, // Should be set to false in production
+                'displayErrorDetails' => true, // Should be set to false in production TODO Uncomment
                 'logError' => false,
                 'logErrorDetails' => false,
                 'logger' => [
                     'name' => 'event-service',
-//                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+//                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log', TODO Uncomment
                     'path' => 'php://stdout',
                     'level' => Logger::DEBUG,
                 ],

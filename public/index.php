@@ -13,7 +13,7 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->useAutowiring(false);
 $containerBuilder->useAnnotations(false);
 
-if (false) {
+if (false) { // TODO Remove if
     $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
 
