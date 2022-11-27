@@ -1,26 +1,7 @@
 {
-    "name": "slim/slim-skeleton",
-    "description": "A Slim Framework skeleton application for rapid development",
-    "keywords": [
-        "microframework",
-        "rest",
-        "router",
-        "psr7"
-    ],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
-        },
-        {
-            "name": "Pierre Berube",
-            "email": "pierre@lgse.com",
-            "homepage": "http://www.lgse.com/"
-        }
-    ],
+    "name": "phpvk/event-service",
+    "description": "A microservice to handle calendar events",
+    "homepage": "https://github.com/enotvtapke/event-service",
     "require": {
         "php": "^8.0",
         "ext-json": "*",
@@ -32,19 +13,8 @@
         "tebru/gson-php": "^0.7.5"
     },
     "require-dev": {
-        "jangregor/phpstan-prophecy": "^1.0.0",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpstan/extension-installer": "^1.2.0",
-        "phpstan/phpstan": "^1.8",
-        "phpunit/phpunit": "^9.5.26",
-        "squizlabs/php_codesniffer": "^3.7"
-    },
-    "config": {
-        "allow-plugins": {
-            "phpstan/extension-installer": true
-        },
-        "process-timeout": 0,
-        "sort-packages": true
+        "phpunit/phpunit": "^9.5.26"
     },
     "autoload": {
         "psr-4": {
