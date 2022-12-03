@@ -29,16 +29,16 @@ return function (ContainerBuilder $containerBuilder) {
                 'logErrorDetails' => false,
                 'logger' => [
                     'name' => 'event-service',
-//                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log', TODO Uncomment
+//                    'path' => isset(getenv('DOCKER')) ? 'php://stdout' : __DIR__ . '/../logs/app.log', TODO Uncomment
                     'path' => 'php://stdout',
                     'level' => Logger::DEBUG,
                 ],
                 "db" => [
-                    "host" => "localhost",
-                    "port" => "5432",
+                    "host" => getenv('DB_HOST') ?: "localhost",
+                    "port" => getenv('DB_PORT') ?: "5432",
                     "dbname" => "postgres",
-                    "user" => $_ENV['db.user'] ?? 'admin',
-                    "password" => $_ENV['db.password'] ?? 'admin'
+                    "user" => getenv('DB_USER') ?: 'admin',
+                    "password" => getenv('DB_PASSWORD') ?: 'admin'
                 ]
             ]);
         },
