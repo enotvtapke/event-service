@@ -5,5 +5,3 @@ databaseChangeLog:
       file: 2022-11-05-tags.yaml
   - include:
       file: 2022-11-05-events-tags.yaml
-  - include:
-      file: default-events.yaml

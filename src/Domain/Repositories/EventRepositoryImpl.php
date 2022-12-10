@@ -16,7 +16,6 @@ class EventRepositoryImpl implements EventRepository
     private EventConverter $eventConverter;
     private TagRepository $tagRepository;
 
-    private string $table = 'EVENTS';
     private string $eventColumns = 'id, name, start, "end"';
 
     public function __construct(PDO $pdo, EventConverter $eventConverter, TagRepository $tagRepository)
@@ -28,14 +27,14 @@ class EventRepositoryImpl implements EventRepository
 
     public function findAll(): array
     {
-        $query = $this->pdo->query("SELECT $this->eventColumns FROM $this->table");
+        $query = $this->pdo->query("SELECT $this->eventColumns FROM events ORDER BY start");
         $events = $query->fetchAll();
         return array_map(fn($row) => $this->convertToEventWithTags($row), $events);
     }
 
     public function findById(int $id): ?Event
     {
-        $query = $this->pdo->prepare("SELECT $this->eventColumns FROM $this->table WHERE id = :id");
+        $query = $this->pdo->prepare("SELECT $this->eventColumns FROM events WHERE id = :id");
         $query->execute([$id]);
         if ($query->rowCount() == 0) {
             return null;
@@ -46,7 +45,7 @@ class EventRepositoryImpl implements EventRepository
     public function findAllWithStartBetween(DateTime $from, ?DateTime $to): array
     {
         $query = $this->pdo->prepare(
-            "SELECT $this->eventColumns FROM $this->table WHERE start >= :start AND start < :end"
+            "SELECT $this->eventColumns FROM events WHERE start >= :start AND start < :end ORDER BY start"
         );
         $query->execute([
             'start' => DateTimeUtils::toString($from),
@@ -66,6 +65,7 @@ class EventRepositoryImpl implements EventRepository
                          from events_tags
                                   join tags on tags.id = events_tags.tag_id
                          where tags.name in ($place_holders))
+            ORDER BY start
             ";
         $query = $this->pdo->prepare("$raw");
         $query->execute($tagNames);
@@ -76,7 +76,7 @@ class EventRepositoryImpl implements EventRepository
     public function create(Event $event): Event
     {
         $query = $this->pdo->prepare(
-            "INSERT INTO $this->table (name, start, \"end\") VALUES (:name, :start, :end)"
+            "INSERT INTO events (name, start, \"end\") VALUES (:name, :start, :end)"
         );
         $query->execute([
             'name' => $event->getName(),
@@ -93,7 +93,7 @@ class EventRepositoryImpl implements EventRepository
     public function update(Event $event)
     {
         $query = $this->pdo->prepare(
-            "UPDATE $this->table SET (name, start, \"end\") = (:name, :start, :end) WHERE id = :id"
+            "UPDATE events SET (name, start, \"end\") = (:name, :start, :end) WHERE id = :id"
         );
         $eventId = $event->getId();
         $query->execute([
@@ -114,7 +114,7 @@ class EventRepositoryImpl implements EventRepository
         $this->pdo->beginTransaction();
 
         $query = $this->pdo->prepare(
-            "DELETE FROM $this->table WHERE id = :id"
+            "DELETE FROM events WHERE id = :id"
         );
         $query->execute([
             'id' => $eventId,

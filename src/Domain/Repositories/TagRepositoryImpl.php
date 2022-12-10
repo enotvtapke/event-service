@@ -9,7 +9,6 @@ use PDO;
 class TagRepositoryImpl implements TagRepository
 {
     private PDO $pdo;
-    private string $table = 'tags';
     private TagConverter $tagConverter;
 
     public function __construct(PDO $pdo, TagConverter $tagConverter)
@@ -23,7 +22,7 @@ class TagRepositoryImpl implements TagRepository
         $this->pdo->beginTransaction();
 
         $tagsQuery = $this->pdo->prepare(
-            "INSERT INTO $this->table (name) VALUES (:name)"
+            "INSERT INTO tags (name) VALUES (:name)"
         );
         $tagsQuery->execute([$tag->getName()]);
 
@@ -55,7 +54,7 @@ class TagRepositoryImpl implements TagRepository
 
     public function delete(int $tagId)
     {
-        $query = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
+        $query = $this->pdo->prepare("DELETE FROM tags WHERE id = :id");
         $query->execute([
             'id' => $tagId
         ]);
